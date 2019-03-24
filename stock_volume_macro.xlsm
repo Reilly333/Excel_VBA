@@ -1,0 +1,48 @@
+Function Create_New_Headers()
+    Dim ColI As Range
+    Set ColI = Range("I1")
+    ColI.Value = "Ticker"
+    
+    Dim ColJ As Range
+    Set ColJ = Range("J1")
+    ColJ.Value = "Total Stock Volume"
+    
+End Function
+
+Function Get_Ticker_Total(Ticker As String) As Double
+ Dim N As Long, i As Long, j As Long
+    N = Cells(Rows.Count, 1).End(xlUp).Row
+    Dim total As Double
+    Dim colAValue As String
+    Dim colGValue As Long
+    total = 0
+    For i = 2 To N
+        colAValue = Cells(i, 1).Value
+        colGValue = Cells(i, 7).Value
+        If Ticker = colAValue Then
+            total = total + colGValue
+        End If
+    Next i
+    Get_Ticker_Total = total
+End Function
+
+Sub Calculate_Ticker_Totals()
+   Call Create_New_Headers
+   Dim N As Long, i As Long, j As Long
+   N = Cells(Rows.Count, 1).End(xlUp).Row
+   Dim tmpValue As String
+   Dim writeRowNum As Integer
+   writeRowNum = 2
+   tmpValue = ""
+    For i = 2 To N
+        Dim colAValue As String
+        colAValue = Cells(i, 1).Value
+        colGValue = Cells(i, 7).Value
+        If tmpValue <> colAValue Then
+            tmpValue = colAValue
+            Cells(writeRowNum, 9).Value = colAValue
+            Cells(writeRowNum, 10).Value = Get_Ticker_Total(colAValue)
+            writeRowNum = writeRowNum + 1
+        End If
+    Next i
+End Sub
